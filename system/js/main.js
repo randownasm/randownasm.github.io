@@ -1179,14 +1179,17 @@ window.addEventListener("load", () => {
       const pages = getPages();
 
       if (!pages.length) {
-        // Only treat this as "genuinely empty" once a fetch has actually
-        // resolved (window.assetsData is set, even to []). Before that,
-        // 0 pages just means data hasn't loaded yet — leave the searching
-        // gif hidden, same as before, since the loading screen covers it.
+        // Only touch the UI once a fetch has actually resolved
+        // (window.assetsData is set, even to []). Before that, 0 pages just
+        // means data hasn't loaded yet — do nothing, same as before, since
+        // the loading screen covers that state.
+        //
+        // Note: the searching/no-results gif is intentionally NOT shown here.
+        // It's reserved for "actively searching and found nothing" — zero
+        // total assets just means a plain empty page.
         if (Array.isArray(window.assetsData)) {
           if (pageIndicator) pageIndicator.textContent = "Page 1/1";
           sessionStorage.setItem("currentPage", 1);
-          updateVisibility();
         }
         return;
       }
